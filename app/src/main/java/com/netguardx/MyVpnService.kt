@@ -103,20 +103,24 @@ class MyVpnService : VpnService() {
     }
 
     private fun handlePacket(buffer: ByteBuffer, outputStream: FileOutputStream) {
-        val ipVersion = buffer.get().toInt() shr 4
+        val ipVersion = (buffer.get(0).toInt() shr 4) and 0x0F
         if (ipVersion == 4) {
-            val headerLength = (buffer.get().toInt() and 0x0F) * 4
-            val protocol = buffer.get(headerLength - 9).toInt()
+            val ipHeaderLength = (buffer.get(0).toInt() and 0x0F) * 4
+            val protocol = buffer.get(9).toInt()
             if (protocol == 17) { // UDP
-                val srcPort = buffer.getShort(headerLength).toInt() and 0xFFFF
-                val dstPort = buffer.getShort(headerLength + 2).toInt() and 0xFFFF
+                val udpHeaderStart = ipHeaderLength
+                val srcPort = buffer.getShort(udpHeaderStart).toInt() and 0xFFFF
+                val dstPort = buffer.getShort(udpHeaderStart + 2).toInt() and 0xFFFF
                 if (dstPort == 53) { // DNS
-                    dnsHandler.handleDns(buffer, outputStream, blocklistManager)
+                    val dnsStart = udpHeaderStart + 8
+                    buffer.position(dnsStart)
+                    dnsHandler.handleDns(buffer.slice(), outputStream, blocklistManager)
                     return
                 }
             }
         }
         // Forward other packets
+        buffer.position(0)
         outputStream.write(buffer.array(), 0, buffer.limit())
     }
 
