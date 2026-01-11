@@ -16,8 +16,6 @@ jobs:
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v2
-        with:
-          api-level: 33
 
       - name: Build APK
         run: ./gradlew assembleRelease
