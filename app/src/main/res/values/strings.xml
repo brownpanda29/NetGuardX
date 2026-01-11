@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">NetGuardX</string>
+    <string name="start_protection">START PROTECTION</string>
+    <string name="stop">STOP</string>
+    <string name="add_app">Add App</string>
+    <string name="add_blocklist">Add Blocklist</string>
+    <string name="update_lists">Update Lists</string>
+    <string name="enter_domain">Enter domain (e.g. ads.example.com)</string>
+    <string name="enter_url">Enter remote blocklist URL</string>
+    <string name="domain">Domain</string>
+    <string name="url">URL</string>
+    <string name="enabled">Enabled</string>
+    <string name="disabled">Disabled</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+</resources>
